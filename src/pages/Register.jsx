@@ -27,14 +27,14 @@ const Register = () => {
       });
       
       if (success) {
-        // messageApi.success('Registration successful! Please log in.');
+        messageApi.success('Registration successful! Please log in.');
         navigate('/login');
       } else {
-        // messageApi.error('Registration failed. Please try again.');
+        messageApi.error('Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('Registration error:', error);
-      // messageApi.error('An error occurred. Please try again.');
+      messageApi.error('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ const Register = () => {
 
           <Form.Item
             name="username"
-            rules={[{ required: true, message: 'Please enter a username!' }]}
+            // rules={[{ required: true, message: 'Please enter a username!' }]}
           >
             <Input prefix={<UserOutlined />} placeholder="Username" />
           </Form.Item>
@@ -115,7 +115,7 @@ const Register = () => {
             <Input 
               prefix={<PhoneOutlined />} 
               placeholder="Mobile Number"
-           
+              addonBefore="+254"
             />
           </Form.Item>
 
