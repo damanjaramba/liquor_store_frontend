@@ -50,7 +50,7 @@ const Footer = () => {
             <address className="not-italic text-gray-400">
               <p>123 Liquor Street</p>
               <p>Nairobi, Kenya</p>
-              <p className="mt-2">Phone: +254 712 345 678</p>
+              <p className="mt-2">Phone: +254 706 925 614</p>
               <p>Email: info@damarisliquor.com</p>
             </address>
           </div>
