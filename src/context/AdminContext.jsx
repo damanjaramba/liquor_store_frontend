@@ -35,7 +35,6 @@ export const AdminProvider = ({ children }) => {
       const data = await response.data
       console.log('>>>>>>>',data)
       setProducts(data);
-      
       setError(null);
     } catch (err) {
       console.error('Error fetching products:', err);

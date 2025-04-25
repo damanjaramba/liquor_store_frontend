@@ -16,7 +16,7 @@ const Register = () => {
     setLoading(true);
     try {
       // Format the mobile number to include the country code
-      const mobileNumber = `+254${values.mobileNumber}`;
+      const mobileNumber = values.mobileNumber;
       
       const success = await register({
         name: values.fullName,
@@ -27,14 +27,14 @@ const Register = () => {
       });
       
       if (success) {
-        messageApi.success('Registration successful! Please log in.');
+        // messageApi.success('Registration successful! Please log in.');
         navigate('/login');
       } else {
-        messageApi.error('Registration failed. Please try again.');
+        // messageApi.error('Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('Registration error:', error);
-      messageApi.error('An error occurred. Please try again.');
+      // messageApi.error('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ const Register = () => {
             name="password"
             rules={[
               { required: true, message: 'Please enter a password!' },
-              { min: 6, message: 'Password must be at least 6 characters!' }
+              // { min: 6, message: 'Password must be at least 6 characters!' }
             ]}
           >
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
@@ -115,7 +115,7 @@ const Register = () => {
             <Input 
               prefix={<PhoneOutlined />} 
               placeholder="Mobile Number"
-              addonBefore="+254"
+           
             />
           </Form.Item>
 

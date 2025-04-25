@@ -1,4 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+ import { message } from 'antd';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -11,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     // Load user data and tokens from localStorage on initialization
@@ -36,13 +39,14 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-
+      const userData = await response.json();
+      const responseData = await response.text();
       if (!response.ok) {
+messageApi.error("Invalid username or password");
         return false;
       }
 
-      const userData = await response.json();
-      
+     
       // Save auth data
       setCurrentUser({
         name: userData.name,
@@ -65,10 +69,9 @@ export const AuthProvider = ({ children }) => {
       }));
       localStorage.setItem('token', userData.token);
       localStorage.setItem('refreshToken', userData.refreshToken);
-      
+      messageApi.success("Login successful");
       return true;
     } catch (error) {
-      console.error('Login error:', error);
       return false;
     }
   };
@@ -82,19 +85,21 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(userData),
       });
-
+      const responseData = await response.text();
       if (!response.ok) {
+console.log("response", responseData)
+        messageApi.error(responseData);
         return false;
       }
-
-      // Registration successful
+  
+      messageApi.success("Registration successful, please log in");
       return true;
     } catch (error) {
-      console.error('Registration error:', error);
+
       return false;
     }
   };
-
+  
   const logout = () => {
     // Clear user data and tokens
     setCurrentUser(null);
@@ -126,6 +131,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
+      {contextHolder}
       {!loading && children}
     </AuthContext.Provider>
   );
