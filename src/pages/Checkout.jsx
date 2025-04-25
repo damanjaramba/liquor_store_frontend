@@ -43,7 +43,7 @@ const Checkout = () => {
       await form.validateFields();
       setCurrentStep(currentStep + 1);
     } catch (error) {
-      messageApi.error('Validation failed:', error);
+      console.log('Validation failed:', error);
     }
   };
 
