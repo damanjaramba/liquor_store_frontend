@@ -1,12 +1,12 @@
 import { createContext, useState, useContext, useEffect } from 'react';
- import { message } from 'antd';
+import { message } from 'antd';
 import axios from 'axios';
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-const API_BASE_URL = import.meta.env.VITE_API_URL+"/public/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_URL + "/public/api/v1";
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -20,13 +20,13 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('currentUser');
     const storedToken = localStorage.getItem('token');
     const storedRefreshToken = localStorage.getItem('refreshToken');
-    
+
     if (storedUser && storedToken) {
       setCurrentUser(JSON.parse(storedUser));
       setToken(storedToken);
       setRefreshToken(storedRefreshToken);
     }
-    
+
     setLoading(false);
   }, []);
 
@@ -39,14 +39,14 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-      const userData = await response.json();
-      const responseData = await response.text();
+  
       if (!response.ok) {
-messageApi.error("Invalid username or password");
+        messageApi.error("Invalid username or password");
         return false;
       }
-
-     
+  
+      const userData = await response.json();  // Only call this after checking response.ok!
+  
       // Save auth data
       setCurrentUser({
         name: userData.name,
@@ -55,10 +55,10 @@ messageApi.error("Invalid username or password");
         role: userData.role,
         username: username
       });
-      
+  
       setToken(userData.token);
       setRefreshToken(userData.refreshToken);
-      
+  
       // Store in localStorage
       localStorage.setItem('currentUser', JSON.stringify({
         name: userData.name,
@@ -69,12 +69,16 @@ messageApi.error("Invalid username or password");
       }));
       localStorage.setItem('token', userData.token);
       localStorage.setItem('refreshToken', userData.refreshToken);
+  
       messageApi.success("Login successful");
       return true;
     } catch (error) {
+      console.error('Login error:', error);
+      messageApi.error('Something went wrong. Please try again.');
       return false;
     }
   };
+  
 
   const register = async (userData) => {
     try {
@@ -87,11 +91,11 @@ messageApi.error("Invalid username or password");
       });
       const responseData = await response.text();
       if (!response.ok) {
-console.log("response", responseData)
+        console.log("response", responseData)
         messageApi.error(responseData);
         return false;
       }
-  
+
       messageApi.success("Registration successful, please log in");
       return true;
     } catch (error) {
@@ -99,13 +103,13 @@ console.log("response", responseData)
       return false;
     }
   };
-  
+
   const logout = () => {
     // Clear user data and tokens
     setCurrentUser(null);
     setToken(null);
     setRefreshToken(null);
-    
+
     // Remove from localStorage
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
